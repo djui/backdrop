@@ -39,6 +39,8 @@ final class AppState: ObservableObject {
     @Published private(set) var isOnBattery: Bool = false
     @Published private(set) var isLowPowerMode: Bool = false
     @Published private(set) var energyPaused: Bool = false
+    /// Set on launch when there is no playable wallpaper; MenuBarView opens Settings.
+    @Published var shouldOpenSettings = false
 
     /// Manual pause from the menu overrides energy auto-pause until the user resumes.
     private var manuallyPaused: Bool = false
@@ -106,6 +108,13 @@ final class AppState: ObservableObject {
         restoreLibraryFolder()
         engine.startMonitoringDisplays()
         isInitializing = false
+        if selectedVideoURL == nil {
+            shouldOpenSettings = true
+        }
+    }
+
+    func acknowledgeSettingsOpened() {
+        shouldOpenSettings = false
     }
 
     func chooseLibraryFolder() {
@@ -202,13 +211,15 @@ final class AppState: ObservableObject {
 
             if let path = defaults.string(forKey: Keys.selectedVideoPath) {
                 let saved = URL(fileURLWithPath: path)
-                if library.videos.contains(where: { $0.path == saved.path }) {
+                if library.videos.contains(where: { $0.path == saved.path }),
+                   FileManager.default.isReadableFile(atPath: saved.path) {
                     selectVideo(saved)
-                } else if let first = library.videos.first {
-                    selectVideo(first)
+                } else {
+                    // Previous wallpaper is missing — clear it and let launch open Settings.
+                    selectedVideoURL = nil
+                    defaults.removeObject(forKey: Keys.selectedVideoPath)
+                    NSLog("Backdrop: saved wallpaper not found: \(path)")
                 }
-            } else if let first = library.videos.first {
-                selectVideo(first)
             }
         } catch {
             NSLog("Backdrop: failed to restore folder bookmark: \(error.localizedDescription)")
