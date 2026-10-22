@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Backdrop — video wallpaper for macOS</title>
+  <meta name="description" content="Backdrop is a small menu bar app that loops any video as your macOS desktop wallpaper, and pauses itself on battery or Low Power Mode.">
+  <meta name="theme-color" content="#141c45">
+  <meta property="og:title" content="Backdrop — video wallpaper for macOS">
+  <meta property="og:description" content="Loop any video as your desktop wallpaper. Pauses itself on battery.">
+  <meta property="og:image" content="https://djui.github.io/backdrop/assets/icon_1024.png">
+  <meta property="og:url" content="https://djui.github.io/backdrop/">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" type="image/png" href="assets/icon_64.png">
+  <link rel="apple-touch-icon" href="assets/icon_256.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="hero" id="top">
+  <div class="scene scene--hero" data-scene="hero" data-palette="dusk" aria-hidden="true">
+    <div class="scene__sky"></div>
+    <div class="scene__stars"></div>
+    <div class="scene__sun"></div>
+  </div>
+
+  <nav class="menubar" aria-label="Primary">
+    <a class="menubar__brand" href="#top">
+      <img src="assets/icon_64.png" alt="" width="18" height="18">
+      <span>Backdrop</span>
+    </a>
+    <a class="menubar__link" href="#loop">Features</a>
+    <a class="menubar__link" href="#install">Install</a>
+    <a class="menubar__link" href="https://github.com/djui/backdrop">GitHub</a>
+    <span class="menubar__spacer"></span>
+    <div class="menubar__extra">
+      <button class="menubar__item" id="menuToggle" aria-haspopup="menu" aria-expanded="false" aria-controls="menuPopover" title="Backdrop menu">
+        <svg viewBox="0 0 20 16" width="20" height="16" aria-hidden="true"><rect x="1" y="1.5" width="18" height="13" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 5.2v5.6l4.6-2.8z" fill="currentColor"/></svg>
+        <span class="visually-hidden">Backdrop menu</span>
+      </button>
+      <div class="popover" id="menuPopover" role="menu" hidden>
+        <button role="menuitem" id="heroPlayPause">Pause</button>
+        <a role="menuitem" href="#loop">Settings…</a>
+        <hr>
+        <a role="menuitem" data-download href="https://github.com/djui/backdrop/releases/download/v1.1.0/Backdrop-1.1.0.zip">Download <span data-version>v1.1.0</span></a>
+      </div>
+    </div>
+    <time class="menubar__clock" id="clock" aria-hidden="true"></time>
+  </nav>
+
+  <div class="hero__copy">
+    <h1 class="wordmark reveal-load" style="--d:0">Backdrop</h1>
+    <p class="hero__headline reveal-load" style="--d:1">Your desktop, quietly in motion.</p>
+    <p class="hero__lede reveal-load" style="--d:2">A small menu bar app for macOS that loops any video as your wallpaper, and pauses itself when you’re on battery.</p>
+    <div class="hero__actions reveal-load" style="--d:3">
+      <a class="btn btn--primary" data-download href="https://github.com/djui/backdrop/releases/download/v1.1.0/Backdrop-1.1.0.zip">
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 1.5v9m0 0L4.5 7M8 10.5 11.5 7M2.5 14h11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Download for Mac
+      </a>
+      <a class="btn btn--ghost" href="https://github.com/djui/backdrop">View on GitHub</a>
+      <p class="hero__meta"><span data-version>v1.1.0</span> · Universal · macOS 16 Tahoe or later · Free</p>
+    </div>
+  </div>
+</header>
+
+<main class="day">
+
+  <section class="feature" id="loop">
+    <div class="feature__text reveal">
+      <p class="eyebrow">01 — Loop</p>
+      <h2>Point it at a folder. Pick a clip. That’s the setup.</h2>
+      <p>Backdrop scans a folder of <code>mp4</code>, <code>mov</code> and <code>m4v</code> files. Choose one in Settings and it repeats behind your windows until you pick another. Try it here.</p>
+    </div>
+
+    <div class="window reveal" role="group" aria-label="Settings preview">
+      <div class="window__bar">
+        <span class="window__lights" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="window__title">Wallpaper</span>
+      </div>
+      <div class="window__body">
+        <div class="scene scene--mini" data-scene="library" data-palette="dusk" aria-hidden="true">
+          <div class="scene__sky"></div>
+          <div class="scene__stars"></div>
+          <div class="scene__sun"></div>
+        </div>
+        <div class="folder">
+          <span class="folder__path">~/Movies/Wallpapers</span>
+          <span class="folder__change">Change…</span>
+        </div>
+        <ul class="clips" id="clips" role="listbox" aria-label="Videos">
+          <li role="option" aria-selected="true" tabindex="0" data-palette="dusk">
+            <span class="clips__thumb" data-thumb="dusk"></span>
+            <span class="clips__name">Dusk over ridges.mov</span>
+            <span class="clips__len">0:42</span>
+          </li>
+          <li role="option" aria-selected="false" tabindex="-1" data-palette="fog">
+            <span class="clips__thumb" data-thumb="fog"></span>
+            <span class="clips__name">Valley fog.mp4</span>
+            <span class="clips__len">1:08</span>
+          </li>
+          <li role="option" aria-selected="false" tabindex="-1" data-palette="night">
+            <span class="clips__thumb" data-thumb="night"></span>
+            <span class="clips__name">Midnight.m4v</span>
+            <span class="clips__len">2:15</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="feature feature--flip" id="pace">
+    <div class="feature__text reveal">
+      <p class="eyebrow">02 — Pace</p>
+      <h2>Slow the clouds down. Or don’t.</h2>
+      <p>Set playback anywhere from a drowsy 0.25× to a brisk 2×. The slider below drives every scene on this page, including the one at the top.</p>
+    </div>
+
+    <div class="pace reveal">
+      <div class="scene scene--wide" data-scene="pace" data-palette="fog" aria-hidden="true">
+        <div class="scene__sky"></div>
+        <div class="scene__stars"></div>
+        <div class="scene__sun"></div>
+      </div>
+      <div class="pace__control">
+        <label for="speed" class="pace__label">Speed</label>
+        <input type="range" id="speed" min="0" max="6" step="1" value="3" aria-valuetext="1×">
+        <output for="speed" id="speedOut" class="pace__out">1×</output>
+      </div>
+      <div class="pace__ticks" aria-hidden="true"><span>0.25×</span><span>1×</span><span>2×</span></div>
+    </div>
+  </section>
+
+  <section class="feature" id="rest">
+    <div class="feature__text reveal">
+      <p class="eyebrow">03 — Rest</p>
+      <h2>Knows when to sit still.</h2>
+      <p>Unplug, or switch on Low Power Mode, and Backdrop freezes on the current frame. Your desktop still looks good and the battery barely notices. Plug back in and it picks up where it stopped.</p>
+    </div>
+
+    <div class="rest reveal">
+      <div class="scene scene--wide" data-scene="rest" data-palette="dusk" aria-hidden="true">
+        <div class="scene__sky"></div>
+        <div class="scene__stars"></div>
+        <div class="scene__sun"></div>
+        <p class="rest__badge" id="restBadge" hidden>Paused · showing last frame</p>
+      </div>
+      <div class="rest__controls">
+        <div class="segmented" role="radiogroup" aria-label="Power source">
+          <button role="radio" aria-checked="true" data-power="adapter">Power adapter</button>
+          <button role="radio" aria-checked="false" data-power="battery">Battery</button>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="pauseBattery" checked>
+          <span class="toggle__track" aria-hidden="true"></span>
+          Pause playback on battery
+        </label>
+        <label class="toggle">
+          <input type="checkbox" id="lowPower">
+          <span class="toggle__track" aria-hidden="true"></span>
+          Low Power Mode
+        </label>
+      </div>
+    </div>
+  </section>
+
+  <section class="extras" aria-label="Also included">
+    <div class="extras__item reveal">
+      <h3>Every display</h3>
+      <p>One desktop-level player per screen, so external monitors loop too.</p>
+    </div>
+    <div class="extras__item reveal">
+      <h3>Stays out of the way</h3>
+      <p>Lives in the menu bar with no Dock icon. Play/Pause, Settings, Quit.</p>
+    </div>
+    <div class="extras__item reveal">
+      <h3>Open at Login</h3>
+      <p>Turn it on once in Settings and your wallpaper is moving when you sign in.</p>
+    </div>
+  </section>
+
+  <section class="install" id="install">
+    <div class="install__head reveal">
+      <p class="eyebrow">Install</p>
+      <h2>Up and running in a minute.</h2>
+    </div>
+    <ol class="steps">
+      <li class="reveal">
+        <span class="steps__n">1</span>
+        <div>
+          <h3>Download and unzip</h3>
+          <p>Grab <a data-download href="https://github.com/djui/backdrop/releases/download/v1.1.0/Backdrop-1.1.0.zip"><span data-asset>Backdrop-1.1.0.zip</span></a> and move <code>Backdrop.app</code> to Applications.</p>
+        </div>
+      </li>
+      <li class="reveal">
+        <span class="steps__n">2</span>
+        <div>
+          <h3>Clear the quarantine flag</h3>
+          <p>The build isn’t notarized yet, so macOS needs a nudge the first time:</p>
+          <div class="cmd">
+            <code id="cmd">xattr -cr /Applications/Backdrop.app</code>
+            <button class="cmd__copy" data-copy="#cmd">Copy</button>
+          </div>
+        </div>
+      </li>
+      <li class="reveal">
+        <span class="steps__n">3</span>
+        <div>
+          <h3>Pick a video</h3>
+          <p>Settings opens on first launch. Choose a folder and a clip, and you’re done.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="finale">
+    <div class="scene scene--finale" data-scene="finale" data-palette="night" aria-hidden="true">
+      <div class="scene__sky"></div>
+      <div class="scene__stars"></div>
+      <div class="scene__sun"></div>
+    </div>
+    <div class="finale__copy reveal">
+      <h2>Give your desktop a pulse.</h2>
+      <div class="hero__actions">
+        <a class="btn btn--primary" data-download href="https://github.com/djui/backdrop/releases/download/v1.1.0/Backdrop-1.1.0.zip">Download <span data-version>v1.1.0</span></a>
+        <a class="btn btn--ghost" href="https://github.com/djui/backdrop/releases">All releases</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <p><img src="assets/icon_64.png" alt="" width="20" height="20"> Backdrop</p>
+  <p>Requires macOS 16 Tahoe or later. Lock Screen wallpaper isn’t part of this version.</p>
+  <p><a href="https://github.com/djui/backdrop">Source</a> · <a href="https://github.com/djui/backdrop/issues">Issues</a> · <a href="https://github.com/djui/backdrop/releases">Releases</a></p>
+</footer>
+
+<script src="main.js" defer></script>
+</body>
+</html>
